@@ -16,6 +16,8 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div class="noise-overlay"></div>
+    <div class="mouse-glow" id="mouseGlow"></div>
     <!-- Navigation -->
     <nav class="navbar" id="navbar">
         <div class="nav-container">
@@ -39,8 +41,14 @@
 
     <!-- Hero Section -->
     <section class="hero" id="hero">
+        <canvas class="hero-particles" id="heroParticles"></canvas>
         <div class="hero-bg-grid"></div>
         <div class="hero-glow"></div>
+        <div class="floating-orbs">
+            <div class="orb orb-1"></div>
+            <div class="orb orb-2"></div>
+            <div class="orb orb-3"></div>
+        </div>
         <div class="hero-content">
             <div class="hero-badge">
                 <span class="badge-dot"></span>
@@ -93,6 +101,8 @@
             <span>Scroll to explore</span>
         </div>
     </section>
+
+    <div class="glow-line"></div>
 
     <!-- About Section -->
     <section class="section about" id="about">
@@ -248,6 +258,8 @@
         </div>
     </section>
 
+    <div class="glow-line"></div>
+
     <!-- Projects Section -->
     <section class="section projects" id="projects">
         <div class="container">
@@ -257,6 +269,7 @@
             </div>
             <div class="projects-grid">
                 <div class="project-card featured">
+                    <div class="card-glow"></div>
                     <div class="project-label">Featured Project</div>
                     <div class="project-icon"><i class="fa-solid fa-robot"></i></div>
                     <h3>CDH Agentic APIs</h3>
@@ -286,6 +299,7 @@
                 </div>
 
                 <div class="project-card">
+                    <div class="card-glow"></div>
                     <div class="project-icon"><i class="fa-solid fa-envelope-open-text"></i></div>
                     <h3>Beefree Editor AI</h3>
                     <p class="project-subtitle">AI-Powered Email Content Generation</p>
@@ -309,6 +323,7 @@
                 </div>
 
                 <div class="project-card">
+                    <div class="card-glow"></div>
                     <div class="project-icon"><i class="fa-solid fa-magnifying-glass"></i></div>
                     <h3>AI Function Search</h3>
                     <p class="project-subtitle">RAG-Powered Semantic Search Pipeline</p>
@@ -333,6 +348,8 @@
             </div>
         </div>
     </section>
+
+    <div class="glow-line"></div>
 
     <!-- Skills Section -->
     <section class="section skills" id="skills">
@@ -423,6 +440,8 @@
         </div>
     </section>
 
+    <div class="glow-line"></div>
+
     <!-- Education & Certifications -->
     <section class="section education" id="education">
         <div class="container">
@@ -458,6 +477,8 @@
             </div>
         </div>
     </section>
+
+    <div class="glow-line"></div>
 
     <!-- Contact Section -->
     <section class="section contact" id="contact">
