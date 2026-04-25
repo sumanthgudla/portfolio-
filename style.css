@@ -652,6 +652,79 @@ img {
     font-size: 0.85rem;
 }
 
+/* Profile Photo */
+.profile-photo-wrapper {
+    position: relative;
+    width: 260px;
+    height: 260px;
+    margin: 0 auto 40px;
+}
+
+.profile-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    position: relative;
+    z-index: 2;
+    border: 3px solid var(--border-light);
+    transition: transform 0.5s ease, box-shadow 0.5s ease;
+}
+
+.profile-photo-wrapper:hover .profile-photo {
+    transform: scale(1.03);
+    box-shadow: 0 0 40px var(--accent-glow-strong);
+}
+
+.profile-ring {
+    position: absolute;
+    inset: -8px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    border-top-color: var(--accent);
+    border-right-color: var(--accent-light);
+    animation: spinRing 6s linear infinite;
+    z-index: 1;
+}
+
+.profile-ring-2 {
+    inset: -16px;
+    border-top-color: transparent;
+    border-right-color: transparent;
+    border-bottom-color: var(--accent);
+    border-left-color: rgba(168, 99, 255, 0.5);
+    animation: spinRingReverse 8s linear infinite;
+    opacity: 0.6;
+}
+
+@keyframes spinRing {
+    to { transform: rotate(360deg); }
+}
+
+@keyframes spinRingReverse {
+    to { transform: rotate(-360deg); }
+}
+
+.profile-glow {
+    position: absolute;
+    inset: -30px;
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--accent-glow-strong) 0%, transparent 70%);
+    z-index: 0;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.profile-photo-wrapper:hover .profile-glow {
+    opacity: 1;
+}
+
+.about-visual {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 /* Code Window */
 .code-window {
     background: var(--bg-secondary);
@@ -1498,6 +1571,11 @@ img {
 
     .about-visual {
         order: -1;
+    }
+
+    .profile-photo-wrapper {
+        width: 200px;
+        height: 200px;
     }
 
     .hero-stats {
