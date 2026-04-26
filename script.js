@@ -404,8 +404,10 @@ window.addEventListener('scroll', () => {
 
 // ===== AI NAVIGATOR =====
 (function() {
-    // Cloudflare Worker URL — set this after deploying the worker
-    const WORKER_URL = 'https://sumanth-ai-agent.YOUR_SUBDOMAIN.workers.dev';
+    // Agent backend URL — set after deploying
+    // Local dev: http://localhost:8000/chat
+    // Production: https://your-deployed-url/chat
+    const AGENT_URL = 'http://localhost:8000/chat';
 
     const trigger = document.getElementById('aiTrigger');
     const overlay = document.getElementById('aiOverlay');
@@ -496,13 +498,13 @@ window.addEventListener('scroll', () => {
         }
     }
 
-    // Call Cloudflare Worker (Azure OpenAI proxy)
+    // Call Python Agent backend
     async function callAgent(query) {
-        if (!WORKER_URL || WORKER_URL.includes('YOUR_SUBDOMAIN')) {
+        if (!AGENT_URL || AGENT_URL.includes('YOUR_')) {
             return localFallback(query);
         }
 
-        const res = await fetch(WORKER_URL, {
+        const res = await fetch(AGENT_URL, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ message: query })
@@ -511,7 +513,7 @@ window.addEventListener('scroll', () => {
         if (!res.ok) throw new Error('Agent unavailable');
 
         const result = await res.json();
-        if (result.error) throw new Error(result.error);
+        if (result.detail) throw new Error(result.detail);
         return result;
     }
 
@@ -593,6 +595,11 @@ window.addEventListener('scroll', () => {
 
         if (result.thought && result.thought !== 'Matched local pattern') {
             html += `<div class="ai-action-label"><i class="fa-solid fa-brain"></i> ${escapeHtml(result.thought)}</div>`;
+        }
+
+        // Show tools used (agentic thinking)
+        if (result.tools_used && result.tools_used.length > 0) {
+            html += `<div class="ai-action-label"><i class="fa-solid fa-wrench"></i> Tools: ${result.tools_used.join(' → ')}</div>`;
         }
 
         html += `<div class="ai-answer">${msgHtml}</div>`;
