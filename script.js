@@ -404,8 +404,8 @@ window.addEventListener('scroll', () => {
 
 // ===== AI NAVIGATOR =====
 (function() {
-    // ⚠️ ADD YOUR OPENAI API KEY HERE
-    const OPENAI_API_KEY = 'YOUR_OPENAI_API_KEY_HERE';
+    // Cloudflare Worker URL — set this after deploying the worker
+    const WORKER_URL = 'https://sumanth-ai-agent.YOUR_SUBDOMAIN.workers.dev';
 
     const trigger = document.getElementById('aiTrigger');
     const overlay = document.getElementById('aiOverlay');
@@ -416,60 +416,7 @@ window.addEventListener('scroll', () => {
 
     if (!trigger || !commandBar) return;
 
-    // Site knowledge for the AI system prompt
-    const SYSTEM_PROMPT = `You are an AI navigator embedded in Sumanth Gudla's portfolio website. You control the website UI.
 
-ABOUT SUMANTH:
-- Agentic AI Developer at Pegasystems (3+ years: Jan 2022 – present)
-- Expert in: Multi-agent orchestration, MCP servers, RAG pipelines, LLM-powered applications
-- Skills: Python, Java, Kotlin, JavaScript, TypeScript, LangChain, OpenAI, Azure, Docker, PostgreSQL, DuckDB, Pinecone
-- Education: B.Tech Computer Science, GMR Institute of Technology (2018-2022, 8.08 CGPA)
-- Certifications: Azure AI-900, Azure AI-102
-- Email: SumanthGudla52@gmail.com
-- LinkedIn: linkedin.com/in/sumanth-gudla-468807160
-- GitHub: github.com/sumanthgudla
-- Phone: +91 91549 49289
-- Location: Visakhapatnam, India
-
-EXPERIENCE AT PEGASYSTEMS:
-- Track 1: Agentic AI Systems — Built CDH Agentic APIs (MCP servers for marketing decisioning), Beefree Editor AI integration, real-time customer data enrichment
-- Track 2: Cloud & Data Engineering — Data pipeline optimization, cloud migration, performance engineering
-- Track 3: Quality & Testing — Led comprehensive testing including Promptfoo LLM evaluation pipeline
-
-PROJECTS:
-1. CDH Agentic APIs — Production-grade agentic AI system, 300+ customer deployments, MCP Protocol, 5 specialized AI tools
-2. Beefree Editor AI — Schema-constrained AI email templates, reduced template creation by 40-50%
-3. AI Function Search — RAG-based semantic search across 10K+ Pega functions, 40% accuracy improvement
-4. LLM Agent Evaluation Pipeline — Promptfoo testing, 28+ automated tests, 4-layer guardrail system, red team tested (GitHub: github.com/sumanthgudla/Promptfoo-testing)
-
-WEBSITE SECTIONS (use these IDs for navigation):
-- #hero — Top/home with intro
-- #about — About section with profile photo and code window
-- #experience — Work experience at Pegasystems (3 tracks)
-- #projects — Project showcase (4 cards)
-- #skills — Skills grid (6 categories)
-- #credentials — Education, certifications, achievements
-- #contact — Email, LinkedIn, phone, location
-
-RESPONSE FORMAT:
-You MUST respond in valid JSON with this exact structure:
-{
-  "thought": "Brief reasoning about what the user wants (1 sentence)",
-  "action": "navigate|answer|highlight|copy",
-  "target": "section ID like #projects, or null for answer-only",
-  "highlight": "CSS selector to highlight, or null",
-  "copy": "text to copy to clipboard, or null",
-  "message": "Your natural language response to display (keep concise, use markdown-light formatting)"
-}
-
-RULES:
-- For navigation questions ("show projects", "go to contact"), use action "navigate" with the target section ID
-- For factual questions ("what's his email?", "skills?"), use action "answer" and include the info in message. If there's a relevant section, also navigate there.
-- For "copy email" or "copy phone", use action "copy" with the text
-- For highlighting specific cards, use action "highlight" with a CSS selector
-- Keep messages SHORT and punchy, like an AI agent reporting back
-- Be friendly but professional. Use occasional emoji sparingly.
-- Always respond in valid JSON. No markdown code blocks around it.`;
 
     let isOpen = false;
 
@@ -538,7 +485,7 @@ RULES:
         response.innerHTML = '';
 
         try {
-            const result = await callOpenAI(query);
+            const result = await callAgent(query);
             thinking.style.display = 'none';
             executeAction(result);
         } catch (err) {
@@ -549,39 +496,23 @@ RULES:
         }
     }
 
-    // OpenAI API call
-    async function callOpenAI(query) {
-        if (!OPENAI_API_KEY || OPENAI_API_KEY === 'YOUR_OPENAI_API_KEY_HERE') {
+    // Call Cloudflare Worker (Azure OpenAI proxy)
+    async function callAgent(query) {
+        if (!WORKER_URL || WORKER_URL.includes('YOUR_SUBDOMAIN')) {
             return localFallback(query);
         }
 
-        const res = await fetch('https://api.openai.com/v1/chat/completions', {
+        const res = await fetch(WORKER_URL, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${OPENAI_API_KEY}`
-            },
-            body: JSON.stringify({
-                model: 'gpt-4o-mini',
-                messages: [
-                    { role: 'system', content: SYSTEM_PROMPT },
-                    { role: 'user', content: query }
-                ],
-                temperature: 0.3,
-                max_tokens: 300
-            })
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: query })
         });
 
-        if (!res.ok) throw new Error('API failed');
+        if (!res.ok) throw new Error('Agent unavailable');
 
-        const data = await res.json();
-        const content = data.choices[0].message.content.trim();
-
-        try {
-            return JSON.parse(content);
-        } catch {
-            return { thought: '', action: 'answer', target: null, highlight: null, copy: null, message: content };
-        }
+        const result = await res.json();
+        if (result.error) throw new Error(result.error);
+        return result;
     }
 
     // Smart local fallback (works without API key)

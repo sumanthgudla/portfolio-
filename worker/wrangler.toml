@@ -1,0 +1,10 @@
+name = "sumanth-ai-agent"
+main = "index.js"
+compatibility_date = "2024-01-01"
+
+[vars]
+AZURE_OPENAI_ENDPOINT = "https://YOUR-RESOURCE-NAME.openai.azure.com"
+AZURE_OPENAI_API_KEY = "YOUR_AZURE_OPENAI_API_KEY"
+AZURE_OPENAI_DEPLOYMENT = "gpt-4o"
+AZURE_OPENAI_API_VERSION = "2024-06-01"
+ALLOWED_ORIGIN = "https://sumanthgudla.github.io"

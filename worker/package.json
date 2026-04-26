@@ -1,0 +1,6 @@
+{
+  "name": "sumanth-ai-agent",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Cloudflare Worker proxy for Sumanth's AI agent"
+}
