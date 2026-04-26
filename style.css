@@ -1650,3 +1650,316 @@ img {
         letter-spacing: -1px;
     }
 }
+
+/* ===== AI NAVIGATOR ===== */
+
+/* Floating trigger button */
+.ai-trigger {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 22px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    z-index: 1000;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    box-shadow: 0 4px 30px var(--accent-glow-strong), 0 0 60px rgba(108, 99, 255, 0.15);
+    transition: all 0.3s ease;
+    animation: triggerPulse 3s ease-in-out infinite;
+}
+
+.ai-trigger:hover {
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 8px 40px var(--accent-glow-strong), 0 0 80px rgba(108, 99, 255, 0.25);
+}
+
+.ai-trigger i {
+    font-size: 1.1rem;
+}
+
+.ai-trigger-shortcut {
+    font-size: 0.7rem;
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.2);
+    font-weight: 500;
+}
+
+@keyframes triggerPulse {
+    0%, 100% { box-shadow: 0 4px 30px var(--accent-glow-strong), 0 0 60px rgba(108, 99, 255, 0.15); }
+    50% { box-shadow: 0 4px 40px var(--accent-glow-strong), 0 0 80px rgba(108, 99, 255, 0.3); }
+}
+
+/* Overlay */
+.ai-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(8px);
+    z-index: 1001;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.ai-overlay.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+/* Command bar */
+.ai-command-bar {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.95);
+    width: min(600px, 90vw);
+    max-height: 70vh;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    z-index: 1002;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 25px 80px rgba(0, 0, 0, 0.5), 0 0 60px rgba(108, 99, 255, 0.1);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.ai-command-bar.active {
+    opacity: 1;
+    pointer-events: all;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+/* Header / input */
+.ai-bar-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+}
+
+.ai-bar-icon {
+    color: var(--accent);
+    font-size: 1.2rem;
+    flex-shrink: 0;
+}
+
+.ai-input {
+    flex: 1;
+    background: none;
+    border: none;
+    outline: none;
+    color: var(--text-primary);
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+}
+
+.ai-input::placeholder {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+}
+
+.ai-bar-shortcut {
+    font-size: 0.7rem;
+    padding: 3px 8px;
+    border-radius: 4px;
+    background: var(--bg-secondary);
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+    font-family: 'JetBrains Mono', monospace;
+    flex-shrink: 0;
+}
+
+/* Response area */
+.ai-response {
+    padding: 20px;
+    overflow-y: auto;
+    max-height: 50vh;
+    font-size: 0.9rem;
+    line-height: 1.7;
+    color: var(--text-secondary);
+}
+
+.ai-welcome-text {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    margin-bottom: 16px;
+}
+
+.ai-welcome-text i {
+    color: var(--accent);
+}
+
+.ai-suggestions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.ai-suggestion {
+    padding: 8px 16px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.ai-suggestion:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(108, 99, 255, 0.1);
+}
+
+/* AI response content */
+.ai-response-content {
+    animation: fadeSlideIn 0.3s ease;
+}
+
+.ai-response-content .ai-action-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.75rem;
+    color: var(--accent);
+    font-family: 'JetBrains Mono', monospace;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.ai-response-content .ai-answer {
+    color: var(--text-primary);
+    line-height: 1.8;
+}
+
+.ai-response-content .ai-answer a {
+    color: var(--accent);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.ai-nav-indicator {
+    margin-top: 12px;
+    padding: 8px 14px;
+    border-radius: 8px;
+    background: rgba(108, 99, 255, 0.08);
+    border: 1px solid rgba(108, 99, 255, 0.15);
+    font-size: 0.8rem;
+    color: var(--accent-light);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+@keyframes fadeSlideIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Thinking indicator */
+.ai-thinking {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 20px;
+    border-top: 1px solid var(--border);
+}
+
+.ai-thinking-dots {
+    display: flex;
+    gap: 4px;
+}
+
+.ai-thinking-dots span {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    animation: thinkBounce 1.4s infinite ease-in-out;
+}
+
+.ai-thinking-dots span:nth-child(2) { animation-delay: 0.2s; }
+.ai-thinking-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes thinkBounce {
+    0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+    40% { transform: scale(1); opacity: 1; }
+}
+
+.ai-thinking-text {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-family: 'JetBrains Mono', monospace;
+}
+
+/* Highlight effect for navigated sections */
+.ai-highlight {
+    animation: aiGlow 2s ease;
+}
+
+@keyframes aiGlow {
+    0% { box-shadow: 0 0 0 4px rgba(108, 99, 255, 0.6); }
+    100% { box-shadow: 0 0 0 4px transparent; }
+}
+
+.ai-highlight-card {
+    animation: aiCardGlow 2.5s ease;
+}
+
+@keyframes aiCardGlow {
+    0%, 20% { border-color: var(--accent) !important; box-shadow: 0 0 30px var(--accent-glow) !important; }
+    100% { border-color: var(--border); box-shadow: none; }
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+    .ai-trigger {
+        bottom: 20px;
+        right: 20px;
+        padding: 12px 16px;
+        font-size: 0.85rem;
+    }
+
+    .ai-trigger-label, .ai-trigger-shortcut {
+        display: none;
+    }
+
+    .ai-trigger {
+        border-radius: 50%;
+        width: 56px;
+        height: 56px;
+        justify-content: center;
+        padding: 0;
+    }
+
+    .ai-command-bar {
+        top: auto;
+        bottom: 0;
+        left: 0;
+        transform: translateY(100%);
+        width: 100%;
+        max-height: 80vh;
+        border-radius: 16px 16px 0 0;
+    }
+
+    .ai-command-bar.active {
+        transform: translateY(0);
+    }
+}

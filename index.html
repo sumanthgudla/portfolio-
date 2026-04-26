@@ -568,6 +568,40 @@
         </div>
     </footer>
 
+    <!-- AI Navigator -->
+    <button class="ai-trigger" id="aiTrigger" aria-label="AI Navigator">
+        <i class="fa-solid fa-wand-magic-sparkles"></i>
+        <span class="ai-trigger-label">Ask AI</span>
+        <span class="ai-trigger-shortcut">Ctrl+K</span>
+    </button>
+
+    <div class="ai-overlay" id="aiOverlay"></div>
+    <div class="ai-command-bar" id="aiCommandBar">
+        <div class="ai-bar-header">
+            <div class="ai-bar-icon"><i class="fa-solid fa-robot"></i></div>
+            <input type="text" id="aiInput" class="ai-input" placeholder="Ask me anything... &quot;show projects&quot;, &quot;what's your email?&quot;, &quot;tell me about experience&quot;" autocomplete="off" spellcheck="false">
+            <div class="ai-bar-shortcut">ESC</div>
+        </div>
+        <div class="ai-response" id="aiResponse">
+            <div class="ai-welcome">
+                <p class="ai-welcome-text"><i class="fa-solid fa-sparkles"></i> I'm Sumanth's AI navigator. Ask me anything about his work.</p>
+                <div class="ai-suggestions">
+                    <button class="ai-suggestion" data-query="show me your projects">show me your projects</button>
+                    <button class="ai-suggestion" data-query="what are your skills?">what are your skills?</button>
+                    <button class="ai-suggestion" data-query="tell me about your experience">tell me about your experience</button>
+                    <button class="ai-suggestion" data-query="how can I contact you?">how can I contact you?</button>
+                    <button class="ai-suggestion" data-query="who are you?">who are you?</button>
+                </div>
+            </div>
+        </div>
+        <div class="ai-thinking" id="aiThinking" style="display: none;">
+            <div class="ai-thinking-dots">
+                <span></span><span></span><span></span>
+            </div>
+            <span class="ai-thinking-text">Reasoning...</span>
+        </div>
+    </div>
+
     <script src="script.js"></script>
 </body>
 </html>
