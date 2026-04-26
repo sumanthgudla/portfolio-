@@ -588,23 +588,46 @@ RULES:
     function localFallback(query) {
         const q = query.toLowerCase();
 
-        // Navigation patterns
+        // Patterns: conversational answers first, then navigation
         const patterns = [
-            { match: /project|built|deploy|agent.*built|what.*built/i, target: '#projects', message: '📦 Navigating to **Deployed Agents** — 4 projects including CDH Agentic APIs (300+ deployments) and the Promptfoo evaluation pipeline.' },
-            { match: /skill|tech|stack|toolkit|language|python|java/i, target: '#skills', message: '⚡ Here\'s the full toolkit — 6 categories spanning AI/ML, languages, cloud, databases, and more.' },
-            { match: /experience|work|job|pega|career|mission/i, target: '#experience', message: '📋 **Mission Logs** — 3+ years at Pegasystems across Agentic AI Systems, Cloud Engineering, and Quality Testing.' },
-            { match: /contact|email|mail|reach|connect|linkedin|phone|handshake/i, target: '#contact', message: '🤝 **Initiate Handshake** — reach out via email (SumanthGudla52@gmail.com), LinkedIn, or phone.' },
-            { match: /about|who|bio|intro|yourself|sumanth/i, target: '#about', message: '👋 **Sumanth Gudla** — Agentic AI Developer at Pegasystems building autonomous AI systems, multi-agent platforms, and MCP servers.' },
+            // === CONVERSATIONAL / SUMMARY QUERIES ===
+            { match: /summar|overview|tell me about (him|sumanth|this|everything)|brief|quick intro|who is (he|sumanth)|describe/i, target: null, message: '🧠 **Sumanth Gudla** is an Agentic AI Developer at Pegasystems with 3+ years of experience building production-grade AI systems.\n\n**What he does:**\n• Builds multi-agent orchestration platforms (MCP servers, ReAct agents)\n• Designs RAG pipelines and LLM-powered applications\n• Ships enterprise AI — 300+ customer deployments\n\n**Key projects:** CDH Agentic APIs, Beefree Editor AI, AI Function Search, LLM Evaluation Pipeline\n\n**Stack:** Python, Kotlin, Java, LangChain, OpenAI, Azure, Docker\n\n**Certifications:** Azure AI-900, AI-102' },
+            { match: /strength|good at|best at|speciali|expertise|what makes|unique|stand.?out|why.*hire/i, target: null, message: '💪 **Core Strengths:**\n\n• **Agentic AI Architecture** — Designed MCP servers handling 300+ enterprise deployments\n• **Full-Stack AI** — From RAG pipelines to production APIs to red-team testing\n• **Testing & Safety** — Built a 28+ test evaluation pipeline with 4-layer guardrails\n• **Multi-Agent Systems** — ReAct agents, tool orchestration, autonomous workflows\n• **Cloud + Data** — Azure certified, experience with Docker, PostgreSQL, DuckDB\n\nHe doesn\'t just build AI — he tests it, secures it, and ships it to production.' },
+            { match: /what (does|did) (he|sumanth) (do|build|work)|what.*work.*on|day.?to.?day|responsib/i, target: '#experience', message: '🔧 **What Sumanth works on at Pegasystems:**\n\n**Track 1 — Agentic AI Systems**\n• Building CDH Agentic APIs with MCP Protocol\n• AI-powered email generation (Beefree integration)\n• Real-time customer data enrichment\n\n**Track 2 — Cloud & Data Engineering**\n• Data pipeline optimization & cloud migration\n• Performance engineering\n\n**Track 3 — Quality & Testing**\n• LLM evaluation with Promptfoo (28+ automated tests)\n• Red team testing & guardrail validation' },
+            { match: /how many (year|exp)|experience.*year|year.*experience|how long/i, target: null, message: '📅 **3+ years** of professional experience at Pegasystems (Jan 2022 – Present), working across Agentic AI, Cloud Engineering, and Testing.' },
+            { match: /ai|artificial intelligence|machine learning|ml|llm|agent/i, target: null, message: '🤖 **Sumanth\'s AI expertise:**\n\n• **Agentic AI** — Multi-agent orchestration, MCP servers, ReAct pattern\n• **LLMs** — GPT-4o, Azure OpenAI, prompt engineering, function calling\n• **RAG** — Pinecone, FAISS, embedding pipelines, semantic search\n• **AI Safety** — Red team testing, 4-layer guardrails, Promptfoo evaluation\n• **Tools** — LangChain, OpenAI API, Azure AI services\n\nHe builds AI that reasons, acts, and is rigorously tested.' },
+            { match: /interest|passion|hobby|outside work|fun fact/i, target: null, message: '🎯 Sumanth is passionate about **agentic AI systems** — building autonomous agents that can reason, plan, and act. He\'s particularly interested in AI safety, red-team testing, and making AI systems reliable enough for enterprise production.' },
+            { match: /location|where.*live|where.*from|based|city/i, target: null, message: '📍 Based in **Visakhapatnam, India**.' },
+            { match: /github|repo|code|open.?source/i, target: null, message: '💻 GitHub: [github.com/sumanthgudla](https://github.com/sumanthgudla)\n\nNotable repo: [Promptfoo-testing](https://github.com/sumanthgudla/Promptfoo-testing) — LLM agent evaluation pipeline with 28+ tests.' },
+
+            // === NAVIGATION QUERIES ===
+            { match: /show.*project|go.*project|navigate.*project|see.*project|project/i, target: '#projects', message: '📦 **Deployed Agents** — 4 projects including CDH Agentic APIs (300+ deployments) and the Promptfoo evaluation pipeline.' },
+            { match: /show.*skill|go.*skill|navigate.*skill|see.*skill|skill|tech|stack|toolkit|language/i, target: '#skills', message: '⚡ Here\'s the full toolkit — 6 categories spanning AI/ML, languages, cloud, databases, and more.' },
+            { match: /show.*experience|go.*experience|navigate.*experience|see.*experience|experience|work|job|pega|career|mission/i, target: '#experience', message: '📋 **Mission Logs** — 3+ years at Pegasystems across Agentic AI Systems, Cloud Engineering, and Quality Testing.' },
+            { match: /show.*contact|go.*contact|navigate.*contact|see.*contact|contact|reach|connect|handshake/i, target: '#contact', message: '🤝 **Initiate Handshake** — reach out via email, LinkedIn, or phone.' },
+            { match: /about|who are you|bio|intro/i, target: '#about', message: '👋 **Sumanth Gudla** — Agentic AI Developer at Pegasystems building autonomous AI systems, multi-agent platforms, and MCP servers.' },
             { match: /education|degree|college|university|cert|train/i, target: '#credentials', message: '🎓 **Training Data** — B.Tech in Computer Science (8.08 CGPA), Azure AI-900 & AI-102 certified.' },
             { match: /top|home|hero|start|beginning/i, target: '#hero', message: '🚀 Back to the top!' },
+
+            // === ACTION QUERIES ===
             { match: /copy.*email|email.*copy/i, target: '#contact', copy: 'SumanthGudla52@gmail.com', message: '📋 Copied **SumanthGudla52@gmail.com** to clipboard!' },
             { match: /copy.*phone|phone.*copy/i, target: '#contact', copy: '+919154949289', message: '📋 Copied **+91 91549 49289** to clipboard!' },
-            { match: /promptfoo|test|evaluat|red.?team|guardrail/i, target: '#projects', highlight: '.project-card:last-child', message: '🛡️ **LLM Agent Evaluation Pipeline** — 28+ automated tests across 4 suites: functional, cost/latency, multi-turn, and red team. [View repo →](https://github.com/sumanthgudla/Promptfoo-testing)' },
-            { match: /cdh|mcp|marketing|decision/i, target: '#projects', highlight: '.project-card.featured', message: '🤖 **CDH Agentic APIs** — Production-grade MCP server for marketing decisioning. 300+ customer deployments, 5 specialized AI tools.' },
-            { match: /beefree|email.*template|editor/i, target: '#projects', highlight: '.project-card:nth-child(2)', message: '✉️ **Beefree Editor AI** — Schema-constrained AI workflow for email templates. Reduced creation time by 40-50%.' },
-            { match: /rag|search|pinecone|function.*search/i, target: '#projects', highlight: '.project-card:nth-child(3)', message: '🔍 **AI Function Search** — RAG pipeline with Pinecone across 10K+ functions. 40% accuracy improvement.' },
+            { match: /email/i, target: null, message: '📧 **SumanthGudla52@gmail.com** — or say "copy email" and I\'ll copy it to your clipboard.' },
+            { match: /phone|number|call/i, target: null, message: '📞 **+91 91549 49289** — or say "copy phone" to copy it.' },
+            { match: /linkedin/i, target: null, message: '🔗 [linkedin.com/in/sumanth-gudla-468807160](https://www.linkedin.com/in/sumanth-gudla-468807160)' },
+
+            // === SPECIFIC PROJECT QUERIES ===
+            { match: /promptfoo|test|evaluat|red.?team|guardrail/i, target: '#projects', highlight: '.project-card:last-child', message: '🛡️ **LLM Agent Evaluation Pipeline** — 28+ automated tests across 4 suites: functional, cost/latency, multi-turn, and red team. Built with Python, Promptfoo, and Azure OpenAI GPT-4o. Features a 4-layer guardrail system.\n\n[View repo →](https://github.com/sumanthgudla/Promptfoo-testing)' },
+            { match: /cdh|mcp|marketing|decision/i, target: '#projects', highlight: '.project-card.featured', message: '🤖 **CDH Agentic APIs** — Production-grade MCP server for Pega Customer Decision Hub. 300+ customer deployments, 5 specialized AI tools with sandbox enforcement. Built with Kotlin, Java, Python, DuckDB.' },
+            { match: /beefree|email.*template|editor/i, target: '#projects', highlight: '.project-card:nth-child(2)', message: '✉️ **Beefree Editor AI** — Schema-constrained AI workflow for email templates using ReAct-style reasoning. Reduced template creation by 40-50%.' },
+            { match: /rag|search|pinecone|function.*search/i, target: '#projects', highlight: '.project-card:nth-child(3)', message: '🔍 **AI Function Search** — RAG pipeline with Pinecone across 10K+ Pega functions. Improved search accuracy by 40%.' },
+
+            // === META QUERIES ===
             { match: /resume|cv|download/i, target: null, message: '📄 Resume available on request — reach out via email or LinkedIn!' },
-            { match: /hire|available|open to/i, target: '#contact', message: '✅ Yes! Open to new opportunities. Best way to connect: **SumanthGudla52@gmail.com** or LinkedIn.' },
+            { match: /hire|available|open to|opportunit/i, target: '#contact', message: '✅ Yes! Open to new opportunities in Agentic AI, LLM systems, and full-stack AI development. Best way to connect: **SumanthGudla52@gmail.com** or LinkedIn.' },
+            { match: /help|what can you|command|how.*work/i, target: null, message: '🤖 I\'m Sumanth\'s AI navigator! Here\'s what I can do:\n\n• **Ask anything** — "give me a summary", "what are his strengths?"\n• **Navigate** — "show projects", "go to skills", "take me to contact"\n• **Get details** — "tell me about CDH", "what\'s Promptfoo?"\n• **Copy info** — "copy email", "copy phone"\n• **Explore** — "what AI tech does he use?", "why should I hire him?"' },
+            { match: /hello|hi|hey|greet|sup|yo/i, target: null, message: '👋 Hey! I\'m Sumanth\'s AI navigator. Ask me anything — like "give me a summary" or "show me his projects"!' },
+            { match: /thank|thanks|awesome|cool|nice|great/i, target: null, message: '🙌 Glad I could help! Feel free to ask more or explore the site.' },
         ];
 
         for (const p of patterns) {
@@ -655,27 +678,33 @@ RULES:
         html += `</div>`;
         response.innerHTML = html;
 
-        // Navigate
+        // Auto-close and navigate
         if (result.target) {
-            const section = document.querySelector(result.target);
-            if (section) {
+            // Brief delay to show the response, then close and scroll
+            setTimeout(() => {
+                closeBar();
                 setTimeout(() => {
-                    section.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    section.classList.add('ai-highlight');
-                    setTimeout(() => section.classList.remove('ai-highlight'), 2500);
-                }, 400);
-            }
+                    const section = document.querySelector(result.target);
+                    if (section) {
+                        section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        section.classList.add('ai-highlight');
+                        setTimeout(() => section.classList.remove('ai-highlight'), 2500);
+                    }
+                }, 300);
+            }, 1200);
         }
 
-        // Highlight specific card
+        // Highlight specific card (after navigation closes)
         if (result.highlight) {
-            const el = document.querySelector(result.highlight);
-            if (el) {
-                setTimeout(() => {
+            const delay = result.target ? 2000 : 800;
+            setTimeout(() => {
+                const el = document.querySelector(result.highlight);
+                if (el) {
                     el.classList.add('ai-highlight-card');
+                    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
                     setTimeout(() => el.classList.remove('ai-highlight-card'), 3000);
-                }, 800);
-            }
+                }
+            }, delay);
         }
 
         // Copy to clipboard
