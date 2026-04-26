@@ -6,7 +6,9 @@ import json
 import time
 from typing import Optional
 from collections import defaultdict
+from pathlib import Path
 
+from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
@@ -14,6 +16,9 @@ from openai import AzureOpenAI
 
 from agent.tools import TOOLS, TOOL_DEFINITIONS, execute_tool
 from agent.knowledge import SYSTEM_PROMPT
+
+# Load .env from agent directory
+load_dotenv(Path(__file__).parent / ".env")
 
 app = FastAPI(title="Sumanth AI Agent", version="1.0.0")
 
