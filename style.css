@@ -29,6 +29,54 @@
     --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
     --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     --max-width: 1200px;
+    --shadow-color: rgba(0, 0, 0, 0.3);
+    --overlay-bg: rgba(0, 0, 0, 0.6);
+    --code-keyword: #c678dd;
+    --code-class: #e5c07b;
+    --code-func: #61afef;
+    --code-string: #98c379;
+    --code-dot-1: #ff5f57;
+    --code-dot-2: #ffbd2e;
+    --code-dot-3: #28c840;
+    --navbar-scrolled-bg: rgba(10, 10, 15, 0.85);
+    --noise-opacity: 0.015;
+    --particle-color: 108, 99, 255;
+    --orb-1-bg: rgba(108, 99, 255, 0.15);
+    --orb-2-bg: rgba(99, 179, 255, 0.1);
+    --orb-3-bg: rgba(168, 99, 255, 0.12);
+}
+
+/* Light Theme */
+[data-theme="light"] {
+    --bg-primary: #f8f9fc;
+    --bg-secondary: #ffffff;
+    --bg-card: #ffffff;
+    --bg-card-hover: #f0f1f5;
+    --text-primary: #1a1a2e;
+    --text-secondary: #4a4a6a;
+    --text-muted: #7a7a9a;
+    --accent: #5b52e6;
+    --accent-light: #7b73ff;
+    --accent-glow: rgba(91, 82, 230, 0.1);
+    --accent-glow-strong: rgba(91, 82, 230, 0.2);
+    --green: #22c55e;
+    --border: #e2e4ea;
+    --border-light: #d4d6de;
+    --shadow-color: rgba(0, 0, 0, 0.08);
+    --overlay-bg: rgba(255, 255, 255, 0.7);
+    --code-keyword: #a626a4;
+    --code-class: #c18401;
+    --code-func: #4078f2;
+    --code-string: #50a14f;
+    --code-dot-1: #ff5f57;
+    --code-dot-2: #ffbd2e;
+    --code-dot-3: #28c840;
+    --navbar-scrolled-bg: rgba(248, 249, 252, 0.9);
+    --noise-opacity: 0.01;
+    --particle-color: 91, 82, 230;
+    --orb-1-bg: rgba(91, 82, 230, 0.08);
+    --orb-2-bg: rgba(82, 160, 230, 0.06);
+    --orb-3-bg: rgba(150, 82, 230, 0.06);
 }
 
 html {
@@ -82,7 +130,7 @@ img {
 }
 
 .navbar.scrolled {
-    background: rgba(10, 10, 15, 0.85);
+    background: var(--navbar-scrolled-bg);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border-bottom: 1px solid var(--border);
@@ -173,6 +221,166 @@ img {
     transform: rotate(-45deg) translate(5px, -5px);
 }
 
+/* Nav Actions (call + theme toggle + hamburger) */
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* Call Button in Nav */
+.nav-call-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 20px;
+    background: var(--accent);
+    color: #fff;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    white-space: nowrap;
+    box-shadow: 0 2px 16px var(--accent-glow);
+}
+
+.nav-call-btn:hover {
+    background: var(--accent-light);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px var(--accent-glow-strong);
+    color: #fff;
+}
+
+.nav-call-btn i {
+    font-size: 0.8rem;
+}
+
+/* Theme Toggle Button */
+.theme-toggle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid var(--border-light);
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.theme-toggle:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    transform: rotate(15deg) scale(1.05);
+    box-shadow: 0 0 20px var(--accent-glow);
+}
+
+.theme-toggle i {
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Contact link in nav - highlighted for recruiters */
+.nav-contact-link {
+    color: var(--accent) !important;
+    font-weight: 600 !important;
+    padding: 6px 16px;
+    border: 1px solid var(--accent);
+    border-radius: 50px;
+    transition: all 0.3s ease !important;
+}
+
+.nav-contact-link:hover {
+    background: var(--accent) !important;
+    color: #fff !important;
+}
+
+.nav-contact-link::after {
+    display: none !important;
+}
+
+/* Light theme specific overrides */
+[data-theme="light"] .hero-bg-grid {
+    background-image:
+        linear-gradient(rgba(91, 82, 230, 0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(91, 82, 230, 0.06) 1px, transparent 1px);
+}
+
+[data-theme="light"] .hero-glow {
+    background: radial-gradient(circle, rgba(91, 82, 230, 0.08) 0%, transparent 70%);
+}
+
+[data-theme="light"] .mouse-glow {
+    background: radial-gradient(circle, rgba(91, 82, 230, 0.04) 0%, transparent 70%);
+}
+
+[data-theme="light"] .code-window {
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+    border: 1px solid var(--border);
+}
+
+[data-theme="light"] .project-card:hover {
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1), 0 0 40px var(--accent-glow);
+}
+
+[data-theme="light"] .exp-track:hover {
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1), 0 0 30px var(--accent-glow);
+}
+
+[data-theme="light"] .profile-photo {
+    border-color: rgba(91, 82, 230, 0.3);
+    background: radial-gradient(circle at center, #fff 0%, #f0f1f5 100%);
+}
+
+[data-theme="light"] .btn-primary {
+    color: #fff;
+    box-shadow: 0 4px 24px rgba(91, 82, 230, 0.25);
+}
+
+[data-theme="light"] .btn-primary:hover {
+    box-shadow: 0 8px 32px rgba(91, 82, 230, 0.35);
+}
+
+[data-theme="light"] .ai-command-bar {
+    box-shadow: 0 25px 80px rgba(0, 0, 0, 0.15), 0 0 60px rgba(91, 82, 230, 0.05);
+}
+
+[data-theme="light"] .skill-category:hover {
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08), 0 0 20px var(--accent-glow);
+}
+
+[data-theme="light"] .contact-card:hover {
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+}
+
+/* Smooth transition for theme change */
+body,
+.navbar,
+.nav-links,
+.hero,
+.section,
+.footer,
+.code-window,
+.code-header,
+.code-body,
+.exp-track,
+.project-card,
+.skill-category,
+.credential-card,
+.contact-card,
+.highlight-item,
+.hero-badge,
+.btn-outline,
+.ai-command-bar,
+.ai-trigger {
+    transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+}
+
 /* ===== HERO ===== */
 .hero {
     min-height: 100vh;
@@ -233,7 +441,7 @@ img {
 .orb-1 {
     width: 400px;
     height: 400px;
-    background: rgba(108, 99, 255, 0.15);
+    background: var(--orb-1-bg);
     top: -10%;
     right: -5%;
     animation-delay: 0s;
@@ -242,7 +450,7 @@ img {
 .orb-2 {
     width: 300px;
     height: 300px;
-    background: rgba(99, 179, 255, 0.1);
+    background: var(--orb-2-bg);
     bottom: -5%;
     left: -5%;
     animation-delay: -7s;
@@ -251,7 +459,7 @@ img {
 .orb-3 {
     width: 250px;
     height: 250px;
-    background: rgba(168, 99, 255, 0.12);
+    background: var(--orb-3-bg);
     top: 40%;
     left: 60%;
     animation-delay: -14s;
@@ -764,9 +972,9 @@ img {
     border-radius: 50%;
 }
 
-.code-dots span:nth-child(1) { background: #ff5f57; }
-.code-dots span:nth-child(2) { background: #ffbd2e; }
-.code-dots span:nth-child(3) { background: #28c840; }
+.code-dots span:nth-child(1) { background: var(--code-dot-1); }
+.code-dots span:nth-child(2) { background: var(--code-dot-2); }
+.code-dots span:nth-child(3) { background: var(--code-dot-3); }
 
 .code-filename {
     font-family: var(--font-mono);
@@ -783,10 +991,10 @@ img {
     color: var(--text-secondary);
 }
 
-.code-keyword { color: #c678dd; }
-.code-class { color: #e5c07b; }
-.code-func { color: #61afef; }
-.code-string { color: #98c379; }
+.code-keyword { color: var(--code-keyword); }
+.code-class { color: var(--code-class); }
+.code-func { color: var(--code-func); }
+.code-string { color: var(--code-string); }
 
 /* ===== EXPERIENCE ===== */
 .experience {
@@ -1478,7 +1686,7 @@ img {
     inset: 0;
     pointer-events: none;
     z-index: 9999;
-    opacity: 0.015;
+    opacity: var(--noise-opacity);
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
 }
 
@@ -1587,6 +1795,23 @@ img {
 
     .nav-toggle {
         display: flex;
+    }
+
+    .nav-call-btn {
+        padding: 8px;
+        border-radius: 50%;
+        width: 36px;
+        height: 36px;
+        justify-content: center;
+    }
+
+    .nav-call-text {
+        display: none;
+    }
+
+    .nav-contact-link {
+        border: none;
+        padding: 0;
     }
 
     .about-grid {
@@ -1702,7 +1927,7 @@ img {
 .ai-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.6);
+    background: var(--overlay-bg);
     backdrop-filter: blur(8px);
     z-index: 1001;
     opacity: 0;

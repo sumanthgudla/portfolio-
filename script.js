@@ -187,6 +187,46 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
+// ===== THEME TOGGLE =====
+function setupThemeToggle() {
+    const toggle = document.getElementById('themeToggle');
+    const icon = document.getElementById('themeIcon');
+    if (!toggle || !icon) return;
+
+    // Check saved preference or system preference
+    const savedTheme = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const theme = savedTheme || (prefersDark ? 'dark' : 'light');
+
+    applyTheme(theme);
+
+    toggle.addEventListener('click', () => {
+        const current = document.documentElement.getAttribute('data-theme') || 'dark';
+        const next = current === 'dark' ? 'light' : 'dark';
+        applyTheme(next);
+        localStorage.setItem('theme', next);
+    });
+
+    // Listen for system preference changes
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+        if (!localStorage.getItem('theme')) {
+            applyTheme(e.matches ? 'dark' : 'light');
+        }
+    });
+
+    function applyTheme(theme) {
+        document.documentElement.setAttribute('data-theme', theme);
+        if (theme === 'light') {
+            icon.className = 'fa-solid fa-moon';
+        } else {
+            icon.className = 'fa-solid fa-sun';
+        }
+    }
+}
+
+// Run theme setup immediately (before DOMContentLoaded) to prevent flash
+setupThemeToggle();
+
 // ===== INIT =====
 document.addEventListener('DOMContentLoaded', () => {
     setupRevealAnimations();
@@ -255,9 +295,11 @@ function setupParticles() {
             if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
         }
         draw() {
+            const cs = getComputedStyle(document.documentElement);
+            const pc = cs.getPropertyValue('--particle-color').trim() || '108, 99, 255';
             ctx.beginPath();
             ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(108, 99, 255, ${this.opacity})`;
+            ctx.fillStyle = `rgba(${pc}, ${this.opacity})`;
             ctx.fill();
         }
     }
@@ -275,8 +317,10 @@ function setupParticles() {
                 const dist = Math.sqrt(dx * dx + dy * dy);
                 if (dist < 150) {
                     const opacity = (1 - dist / 150) * 0.15;
+                    const cs = getComputedStyle(document.documentElement);
+                    const pc = cs.getPropertyValue('--particle-color').trim() || '108, 99, 255';
                     ctx.beginPath();
-                    ctx.strokeStyle = `rgba(108, 99, 255, ${opacity})`;
+                    ctx.strokeStyle = `rgba(${pc}, ${opacity})`;
                     ctx.lineWidth = 0.5;
                     ctx.moveTo(particles[i].x, particles[i].y);
                     ctx.lineTo(particles[j].x, particles[j].y);
